@@ -275,7 +275,31 @@
 
 
     <div class="card"> 
-    <model-viewer loading="eager" src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3" camera-controls
+    <model-viewer
+        id="myModelViewer"
+        src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
+        ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
+        alt="A 3D model"
+        ar
+        ar-modes="scene-viewer webxr quick-look"
+        camera-controls
+        poster="images/BookCover2.png"
+        shadow-intensity="1"
+        ar-scale="auto"
+        ar-placement="floor"
+        interaction-prompt="none"
+        animation-name="Wave">
+        </model-viewer>
+
+    <button id="ar-button-ios" class="ar-button">
+        <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
+        <span style="font-size: 32px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular', sans-serif; white-space: nowrap;">
+            <strong>Launch AR</strong>
+        </span>
+    </button>
+        
+        
+        <!--<model-viewer loading="eager" src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3" camera-controls
                    camera-orbit="0deg 45deg 45%" autoplay animation-name="" id="interaction" id="reveal" exposure="1" shadow-intensity="1" ar ar-modes="scene-viewer webxr quick-look" ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                    alt="kindness rocks" auto-rotate-delay="0" ar-scale="auto"
                    slot= "progress-bar"
@@ -293,8 +317,8 @@
                    style="z-index: 1; width: 100%; height: 480px; position: static; ">
   
      </model-viewer>
-     </div> -->  
-   </model-viewer>
+     </div>   
+   </model-viewer> -->
         </div>
    
     <section class="attribution">
