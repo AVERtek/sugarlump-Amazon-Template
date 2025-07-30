@@ -273,10 +273,10 @@
         <div class="card" style="position: relative;">
             <div style="display: flex; justify-content: center; width: 100%;">
 
-                 <model-viewer
+    <!--<model-viewer
         id="myModelViewer"
         src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
-        ios-src="KINDNESS_ROCKS_LARGE_7_Output.usdz"
+        ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
         alt="A 3D model"
         ar
         ar-modes="scene-viewer webxr quick-look"
@@ -306,8 +306,41 @@
             <span id="durationDisplay" class="time-display">0:00</span>
         </div>
         <button id="url-button" class="url-button">Order "Sweet Dreams" Sugarlump Book</button>
-    </div>
+    </div> -->
 
+  <model-viewer
+      src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
+      ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
+      alt="A 3D model"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+      interaction-prompt="none">
+                
+  <button slot="hotspot-1" data-position="0 0.5 0" data-normal="0 1 0" class="hotspot" style="background: red; border-radius: 50%; width: 20px; height: 20px;"></button>
+  <button slot="hotspot-2" data-position="-0.5 0 0" data-normal="1 0 0" class="hotspot" style="background: blue; border-radius: 50%; width: 20px; height: 20px;"></button>
+
+  <button id="play-animation">Play Animation</button>
+  <button id="order-now">Order Now</button>
+</model-viewer>
+</div>
+            
+<script type="module">
+  const modelViewer = document.querySelector('model-viewer');
+  document.querySelector('#play-animation').addEventListener('click', () => {
+    // Example: Play an animation if your model has them
+    modelViewer.model.animationNames.length > 0 && modelViewer.play({ repetition: 'once' });
+  });
+
+  document.querySelector('#order-now').addEventListener('click', () => {
+    // Handle order logic
+    alert('Ordering the 3D model!');
+  });
+</script>
+                
+                
                 <!--<model-viewer id="reveal" src="Models/entire_family_99cm.glb?sound=Sound/sweet_neighbor_of_mine3.mp3"
                     shadow-intensity="1" ar ar-modes="scene-viewer webxr quick-look" ar-scale="auto"
                     ar-preferred ar-placement="floor" camera-controls camera-orbit="0deg 90deg 100%" loading="lazy"
@@ -331,7 +364,7 @@
                     padding: 10px 15px; font-size: 24px; font-weight: bold; cursor: pointer;">
                     ▶
                 </button>
-            </div> -->
+            </div> 
         </div>
 
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
