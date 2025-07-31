@@ -122,12 +122,6 @@
             background-color: #f0f8ff;
             border-color: #48b0cc;
         }
-    
-        /* This CSS rule is what will show the button only on supported devices */
-        /* It correctly targets the AR button slot and ensures it's hidden when not available */
-        model-viewer[ar-status="not-presenting"] #ar-button-slotted {
-            display: none;
-        }
 
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
@@ -165,7 +159,7 @@
                 interaction-prompt="none"
                 animation-name="Wave">
                 
-                <button slot="ar-button" id="ar-button-slotted" class="action-button">
+                <button slot="ar-button" id="ar-button-slotted" class="action-button" style="display:none;">
                     <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
                     <span class="action-button-text">
                         <strong>Press Here</strong>
@@ -193,9 +187,36 @@
         const playPauseButton = document.getElementById('play-pause-button');
         const playPauseIcon = document.getElementById('play-pause-icon');
         const playPauseText = playPauseButton.querySelector('strong');
+        const arButtonSlotted = document.getElementById('ar-button-slotted');
         const sound = document.getElementById('sound');
         let isPlaying = false;
         
+        // This function runs once when the page is loaded
+        window.addEventListener('load', () => {
+            // Check if the device can activate AR
+            if (modelViewer.canActivateAR) {
+                // If it can, show the "Press Here" AR button
+                arButtonSlotted.style.display = 'flex';
+                
+                // Add the AR button's click behavior for supported devices
+                arButtonSlotted.addEventListener('click', () => {
+                    // Pause other media on AR launch
+                    modelViewer.pause();
+                    sound.pause();
+                    isPlaying = false;
+                    playPauseIcon.src = 'images/play_icon.png';
+                    playPauseText.textContent = 'Play';
+                    // The 'slot="ar-button"' attribute will automatically launch AR.
+                });
+            } else {
+                // If it can't, show a custom alert on click
+                arButtonSlotted.style.display = 'flex'; // Show button
+                arButtonSlotted.addEventListener('click', () => {
+                    alert("AR is supported only on a mobile device, not on this device or browser.");
+                });
+            }
+        });
+
         // Function to toggle play/pause for 3D animation and sound
         function togglePlayPause() {
             if (isPlaying) {
@@ -229,23 +250,10 @@
                 }
             }
         });
-        
-        // Custom logic for the AR button
-        const arButtonSlotted = document.getElementById('ar-button-slotted');
-        arButtonSlotted.addEventListener('click', () => {
-            // Check if AR can be activated before attempting to launch
-            if (modelViewer.canActivateAR) {
-                // model-viewer handles the AR launch automatically for slotted buttons
-                // No need for a separate activateAR() call here
-            } else {
-                // If not supported, show the custom alert message
-                alert("AR is supported only on a mobile device, not on this device or browser.");
-            }
-        });
-
     </script>
 </body>
 </html>
+
 
 <!--<!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
