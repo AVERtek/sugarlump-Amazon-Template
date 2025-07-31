@@ -122,12 +122,12 @@
             background-color: #f0f8ff;
             border-color: #48b0cc;
         }
-
-        /* Hide the AR button when not on a compatible device */
-        model-viewer:not([ar-status="not-presenting"]) #ar-button-slotted {
-            display: none !important;
+    
+        /* This CSS rule is what will show the button only on supported devices */
+        /* It correctly targets the AR button slot and ensures it's hidden when not available */
+        model-viewer[ar-status="not-presenting"] #ar-button-slotted {
+            display: none;
         }
-
 
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
@@ -230,17 +230,22 @@
             }
         });
         
-        // Alert for unsupported AR on desktop
+        // Custom logic for the AR button
         const arButtonSlotted = document.getElementById('ar-button-slotted');
-        if (arButtonSlotted && !modelViewer.canActivateAR) {
-            arButtonSlotted.addEventListener('click', () => {
+        arButtonSlotted.addEventListener('click', () => {
+            // Check if AR can be activated before attempting to launch
+            if (modelViewer.canActivateAR) {
+                // model-viewer handles the AR launch automatically for slotted buttons
+                // No need for a separate activateAR() call here
+            } else {
+                // If not supported, show the custom alert message
                 alert("AR is supported only on a mobile device, not on this device or browser.");
-            });
-        }
+            }
+        });
+
     </script>
 </body>
 </html>
-
 
 <!--<!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
