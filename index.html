@@ -11,33 +11,32 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
         function gtag() {
             dataLayer.push(arguments);
         }
         gtag('js', new Date());
-
         gtag('config', '0-0000000000');
     </script>
 
     <style>
         /* Your CSS styles here */
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             overflow-x: hidden;
             font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
             color: #244376;
+            background-color: #ffff99;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
         .container {
             max-width: 600px;
             width: 100%;
             box-sizing: border-box;
             padding: 0 10px;
         }
-
         .card {
             background-color: #ffff99;
             border: 2px solid #ffff99;
@@ -49,8 +48,6 @@
             text-align: center;
             border-radius: 6px;
         }
-
-        /* model-viewer specific styling */
         model-viewer {
             width: 100%;
             height: 400px;
@@ -61,7 +58,7 @@
         model-viewer::part(ar-button) {
             display: none !important;
         }
-        
+
         .button-container {
             margin-top: 30px;
             display: flex;
@@ -70,7 +67,7 @@
             gap: 10px;
         }
 
-        .ar-button {
+        .action-button {
             background-color: #ffffff;
             border-radius: 8px;
             border: 2px solid #59cbe8;
@@ -83,65 +80,39 @@
             cursor: pointer;
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-
-        .ar-button:hover {
+        .action-button:hover {
             background-color: #f0f8ff;
             border-color: #48b0cc;
         }
-
-        .ar-button-text {
+        .action-button-text {
             font-size: 32px;
             color: #000099;
             font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
             white-space: nowrap;
         }
 
+        /* Styling for the play/pause button */
+        #play-pause-button {
+            margin-bottom: 10px; /* Add some space between the buttons */
+        }
+        /* Hide the AR button when AR is active */
+        model-viewer[ar-status="activating"] .action-button,
+        model-viewer[ar-status="active"] .action-button {
+            display: none;
+        }
+        
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
             src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
         }
-
         @font-face {
             font-family: 'DaisyByhapppyal-Regular';
             src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
         }
-
-        .daisy-text {
-            font-family: 'DaisyByhapppyal-Regular', sans-serif;
-            color: #000099;
-            font-size: 60px;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 5px;
-            }
-
-            model-viewer {
-                height: 300px;
-            }
-
-            .ar-button {
-                width: 100%;
-                max-width: 250px;
-                height: 50px;
-            }
-        
-            .ar-button img {
-                height: 3em !important;
-                width: auto;
-                margin-right: 3px;
-            }
-
-            .ar-button span {
-                font-size: 24px !important;
-            }
-        }
     </style>
 </head>
 
-<body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
-
+<body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <div class="container">
@@ -152,7 +123,7 @@
         <div class="card">
             <model-viewer
                 id="myModelViewer"
-                src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
+                src="Models/kindness_rocks_large_7.glb"
                 ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                 alt="A 3D model"
                 ar
@@ -167,9 +138,15 @@
             </model-viewer>
 
             <div class="button-container">
-                <div class="ar-button" id="ar-button">
-                    <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
-                    <span class="ar-button-text">
+                <div class="action-button" id="play-pause-button">
+                    <img id="play-pause-icon" src="images/play_icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Play/Pause Icon">
+                    <span class="action-button-text">
+                        <strong>Play</strong>
+                    </span>
+                </div>
+                <div class="action-button" id="ar-button">
+                    <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
+                    <span class="action-button-text">
                         <strong>Press Here</strong>
                     </span>
                 </div>
@@ -183,49 +160,61 @@
 
     <script>
         const modelViewer = document.getElementById('myModelViewer');
+        const playPauseButton = document.getElementById('play-pause-button');
+        const playPauseIcon = document.getElementById('play-pause-icon');
+        const playPauseText = playPauseButton.querySelector('strong');
         const arButton = document.getElementById('ar-button');
         const sound = document.getElementById('sound');
-        
-        let hasPlayed = false;
+        let isPlaying = false;
 
-        // When the page loads, make sure the sound is not playing and the animation is not running
-        window.addEventListener('load', () => {
-            modelViewer.pause(); // Ensure the animation is paused initially
-            sound.pause();      // Ensure the sound is paused initially
-            sound.currentTime = 0; // Reset sound to the beginning
-        });
+        // Function to toggle play/pause for 3D animation and sound
+        function togglePlayPause() {
+            if (isPlaying) {
+                modelViewer.pause();
+                sound.pause();
+                playPauseIcon.src = 'images/play_icon.png'; // Make sure you have a play icon image
+                playPauseText.textContent = 'Play';
+            } else {
+                modelViewer.play();
+                sound.play().catch(error => {
+                    console.log("Autoplay was prevented. User will need to interact to play sound.", error);
+                });
+                playPauseIcon.src = 'images/pause_icon.png'; // Make sure you have a pause icon image
+                playPauseText.textContent = 'Pause';
+            }
+            isPlaying = !isPlaying;
+        }
 
-        // Add a click event listener to the custom "Press Here" button
+        // Click event for the play/pause button
+        playPauseButton.addEventListener('click', togglePlayPause);
+
+        // Click event for the "Press Here" AR button
         arButton.addEventListener('click', () => {
-            // If the model-viewer is on a mobile device and AR is supported
+            // Pause the 3D animation and sound when entering AR mode
+            modelViewer.pause();
+            sound.pause();
+            isPlaying = false;
+            playPauseIcon.src = 'images/play_icon.png';
+            playPauseText.textContent = 'Play';
+
             if (modelViewer.canActivateAR) {
-                // Check if the button has been clicked before to handle the sound and animation
-                if (!hasPlayed) {
-                    modelViewer.play(); // Start the 3D animation
-                    sound.play().catch(error => {
-                        console.log("Autoplay was prevented. User will need to interact to play sound.", error);
-                    });
-                    hasPlayed = true;
-                }
-                
-                // Then, activate the AR experience
                 modelViewer.activateAR();
             } else {
-                // If it's not a mobile device or AR is not supported
-                // First, start the animation and sound if they haven't started
-                if (!hasPlayed) {
-                    modelViewer.play();
-                    sound.play().catch(error => {
-                        console.log("Autoplay was prevented. User will need to interact to play sound.", error);
-                    });
-                    hasPlayed = true;
-                }
-                
-                // Then show the custom warning message
                 alert("AR is supported only on a mobile device, not on this device or browser.");
             }
         });
-
+        
+        // Listen for when AR is launched to hide the buttons
+        modelViewer.addEventListener('ar-status', (event) => {
+            if (event.detail.status === 'activating' || event.detail.status === 'active') {
+                playPauseButton.style.display = 'none';
+                arButton.style.display = 'none';
+            } else {
+                playPauseButton.style.display = 'flex';
+                arButton.style.display = 'flex';
+            }
+        });
+        
     </script>
 </body>
 </html>
