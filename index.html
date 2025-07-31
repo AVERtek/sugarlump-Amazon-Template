@@ -119,7 +119,7 @@
         <div class="card">
             <model-viewer
                 id="myModelViewer"
-                src="Models/kindness_rocks_large_7.glb"
+                src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
                 ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                 alt="A 3D model"
                 ar
@@ -149,7 +149,7 @@
                     </span>
                 </div>
                 <div class="action-button" id="order-book-button">
-                    <img src="images/Book icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Book Icon">
+                    <img src="images/Book Icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Book Icon">
                     <span class="action-button-text">
                         <strong>Order Book Here</strong>
                     </span>
@@ -163,67 +163,69 @@
     </audio>
 
     <script>
-        const modelViewer = document.getElementById('myModelViewer');
-        const playPauseButton = document.getElementById('play-pause-button');
-        const playPauseIcon = document.getElementById('play-pause-icon');
-        const playPauseText = playPauseButton.querySelector('strong');
-        const arButton = document.getElementById('ar-button');
-        const orderBookButton = document.getElementById('order-book-button'); // New button element
-        const sound = document.getElementById('sound');
-        let isPlaying = false;
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const modelViewer = document.getElementById('myModelViewer');
+            const playPauseButton = document.getElementById('play-pause-button');
+            const playPauseIcon = document.getElementById('play-pause-icon');
+            const playPauseText = playPauseButton.querySelector('strong');
+            const arButton = document.getElementById('ar-button');
+            const orderBookButton = document.getElementById('order-book-button');
+            const sound = document.getElementById('sound');
+            let isPlaying = false;
 
-        // Function to toggle play/pause for 3D animation and sound
-        function togglePlayPause() {
-            if (isPlaying) {
-                modelViewer.pause();
-                sound.pause();
-                playPauseIcon.src = 'images/play_icon.png';
-                playPauseText.textContent = 'Play';
-            } else {
-                modelViewer.play();
-                sound.play().catch(error => {
-                    console.log("Autoplay was prevented. User will need to interact to play sound.", error);
-                });
-                playPauseIcon.src = 'images/pause_icon.png';
-                playPauseText.textContent = 'Pause';
-            }
-            isPlaying = !isPlaying;
-        }
-
-        // Click event for the play/pause button
-        playPauseButton.addEventListener('click', togglePlayPause);
-        
-        // This listener handles the custom AR button's click behavior for all devices
-        arButton.addEventListener('click', () => {
-            if (modelViewer.canActivateAR) {
-                modelViewer.pause();
-                sound.pause();
-                isPlaying = false;
-                playPauseIcon.src = 'images/play_icon.png';
-                playPauseText.textContent = 'Play';
-                modelViewer.activateAR();
-            } else {
-                alert("AR is supported only on a mobile device, not on this device or browser.");
-            }
-        });
-
-        // New click event listener for the "Order Book Here" button
-        orderBookButton.addEventListener('click', () => {
-            // Replace 'YOUR_URL_HERE' with the actual URL for your book
-            window.open('https://www.amazon.com/Sweet-Dreams-Sugarlump-childrens-everywhere/dp/B0FFZD7D12/ref=sr_1_1?crid=2PE5ZR31RUKFJ&dib=eyJ2IjoiMSJ9.eirXTPVo6volOV0M2LSzWYM7M7OETpDHtuB5kCsvMqZpHjvNE3fvrGYiQzi9OEE_KnGVoDwiK8TJUKsihTlWlEkYrzfe4QfSs8rE6vaoo0Y5BfWqKzpuFPGm7bKE9IC-Kz-0FvP462KBgxOa04D1aqLppMInjk90QDppTNon6eTrQ0InDpeNmty3hB14QayZjes0oEcHGgvSH_4m4oM9SHyIbK9wzspljEyRdN_vAiF9SAFTutLx3FZqHy8JM44s5QDZ0XdYakBff_dMR3KMvFf10ZCsMFhMmGz6QY5jPI.EkEaYpKKTbUyJ3uJZG_vjHaGCtcX2MSHyN27dyNdIqY&dib_tag=se&keywords=sugarlump&qid=1752536576&sprefix=sugarlump%2Caps%2C158&sr=8-1'";', '_blank');
-        });
-
-        // This listener will automatically pause the 3D animation and sound when AR starts
-        modelViewer.addEventListener('ar-status', (event) => {
-            if (event.detail.status === 'activating' || event.detail.status === 'active') {
+            // Function to toggle play/pause for 3D animation and sound
+            function togglePlayPause() {
                 if (isPlaying) {
+                    modelViewer.pause();
+                    sound.pause();
+                    playPauseIcon.src = 'images/play_icon.png';
+                    playPauseText.textContent = 'Play';
+                } else {
+                    modelViewer.play();
+                    sound.play().catch(error => {
+                        console.log("Autoplay was prevented. User will need to interact to play sound.", error);
+                    });
+                    playPauseIcon.src = 'images/pause_icon.png';
+                    playPauseText.textContent = 'Pause';
+                }
+                isPlaying = !isPlaying;
+            }
+
+            // Click event for the play/pause button
+            playPauseButton.addEventListener('click', togglePlayPause);
+            
+            // This listener handles the custom AR button's click behavior for all devices
+            arButton.addEventListener('click', () => {
+                if (modelViewer.canActivateAR) {
                     modelViewer.pause();
                     sound.pause();
                     isPlaying = false;
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseText.textContent = 'Play';
+                    modelViewer.activateAR();
+                } else {
+                    alert("AR is supported only on a mobile device, not on this device or browser.");
                 }
-            }
+            });
+
+            // New click event listener for the "Order Book Here" button
+            orderBookButton.addEventListener('click', () => {
+                // Replace 'YOUR_URL_HERE' with the actual URL for your book
+                window.open('https://www.amazon.com/Sweet-Dreams-Sugarlump-childrens-everywhere/dp/B0FFZD7D12/ref=sr_1_1?crid=2PE5ZR31RUKFJ&dib=eyJ2IjoiMSJ9.eirXTPVo6volOV0M2LSzWYM7M7OETpDHtuB5kCsvMqZpHjvNE3fvrGYiQzi9OEE_KnGVoDwiK8TJUKsihTlWlEkYrzfe4QfSs8rE6vaoo0Y5BfWqKzpuFPGm7bKE9IC-Kz-0FvP462KBgxOa04D1aqLppMInjk90QDppTNon6eTrQ0InDpeNmty3hB14QayZjes0oEcHGgvSH_4m4oM9SHyIbK9wzspljEyRdN_vAiF9SAFTutLx3FZqHy8JM44s5QDZ0XdYakBff_dMR3KMvFf10ZCsMFhMmGz6QY5jPI.EkEaYpKKTbUyJ3uJZG_vjHaGCtcX2MSHyN27dyNdIqY&dib_tag=se&keywords=sugarlump&qid=1752536576&sprefix=sugarlump%2Caps%2C158&sr=8-1'";', '_blank');
+            });
+
+            // This listener will automatically pause the 3D animation and sound when AR starts
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'activating' || event.detail.status === 'active') {
+                    if (isPlaying) {
+                        modelViewer.pause();
+                        sound.pause();
+                        isPlaying = false;
+                        playPauseIcon.src = 'images/play_icon.png';
+                        playPauseText.textContent = 'Play';
+                    }
+                }
+            });
         });
     </script>
 </body>
