@@ -8,16 +8,27 @@
     <title>sugarlump-Amazon-Template</title>
 
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', '0-0000000000');
+    </script>
 
     <style>
         /* Your CSS styles here */
-        /* ... (all your existing CSS is fine, but I've kept a minimal version for brevity) ... */
-
+        html,
         body {
-            background-color: #ffff99;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
+            color: #244376;
         }
 
         .container {
@@ -39,18 +50,26 @@
             border-radius: 6px;
         }
 
+        /* model-viewer specific styling */
         model-viewer {
             width: 100%;
-            height: 400px; /* Adjust height as needed */
+            height: 400px;
             --progress-bar-color: #59cbe8;
         }
 
-        /* Default <model-viewer> AR button hidden */
+        /* Hide the default model-viewer AR button */
         model-viewer::part(ar-button) {
             display: none !important;
         }
+        
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-        /* Custom button styling */
         .ar-button {
             background-color: #ffffff;
             border-radius: 8px;
@@ -63,7 +82,6 @@
             padding: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease, border-color 0.3s ease;
-            margin-top: 15px; /* Added margin to separate it from the model-viewer */
         }
 
         .ar-button:hover {
@@ -78,26 +96,63 @@
             white-space: nowrap;
         }
 
-        /* Add your font-face definitions here */
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
             src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
         }
 
+        @font-face {
+            font-family: 'DaisyByhapppyal-Regular';
+            src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
+        }
+
+        .daisy-text {
+            font-family: 'DaisyByhapppyal-Regular', sans-serif;
+            color: #000099;
+            font-size: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 5px;
+            }
+
+            model-viewer {
+                height: 300px;
+            }
+
+            .ar-button {
+                width: 100%;
+                max-width: 250px;
+                height: 50px;
+            }
+        
+            .ar-button img {
+                height: 3em !important;
+                width: auto;
+                margin-right: 3px;
+            }
+
+            .ar-button span {
+                font-size: 24px !important;
+            }
+        }
     </style>
 </head>
 
-<body>
+<body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
 
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
     <div class="container">
         <div class="card">
-            <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto;">
+            <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto; display: block; margin: auto;">
         </div>
 
         <div class="card">
             <model-viewer
                 id="myModelViewer"
-                src="Models/kindness_rocks_large_7.glb"
+                src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
                 ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                 alt="A 3D model"
                 ar
@@ -108,40 +163,69 @@
                 ar-scale="auto"
                 ar-placement="floor"
                 interaction-prompt="none"
-                autoplay
                 animation-name="Wave">
             </model-viewer>
 
-            <div class="ar-button" id="ar-button">
-                <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
-                <span class="ar-button-text">
-                    <strong>Press Here</strong>
-                </span>
+            <div class="button-container">
+                <div class="ar-button" id="ar-button">
+                    <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
+                    <span class="ar-button-text">
+                        <strong>Press Here</strong>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-
-    <audio controls autoplay loop muted id="sound">
+    
+    <audio id="sound" loop preload="auto">
         <source src="Sound/Kindness Rocks_mix.mp3" type="audio/mpeg" />
     </audio>
 
     <script>
-        // Get the model-viewer and the custom button elements
         const modelViewer = document.getElementById('myModelViewer');
         const arButton = document.getElementById('ar-button');
+        const sound = document.getElementById('sound');
+        
+        let hasPlayed = false;
 
-        // Add a click event listener to the custom button
+        // When the page loads, make sure the sound is not playing and the animation is not running
+        window.addEventListener('load', () => {
+            modelViewer.pause(); // Ensure the animation is paused initially
+            sound.pause();      // Ensure the sound is paused initially
+            sound.currentTime = 0; // Reset sound to the beginning
+        });
+
+        // Add a click event listener to the custom "Press Here" button
         arButton.addEventListener('click', () => {
-            // Check if model-viewer is supported and can launch AR
+            // If the model-viewer is on a mobile device and AR is supported
             if (modelViewer.canActivateAR) {
-                // This method triggers the AR experience
+                // Check if the button has been clicked before to handle the sound and animation
+                if (!hasPlayed) {
+                    modelViewer.play(); // Start the 3D animation
+                    sound.play().catch(error => {
+                        console.log("Autoplay was prevented. User will need to interact to play sound.", error);
+                    });
+                    hasPlayed = true;
+                }
+                
+                // Then, activate the AR experience
                 modelViewer.activateAR();
             } else {
-                console.warn('AR is not supported on this device or browser.');
-                // You can add a fallback or an alert message here
-                alert('AR is not supported on this device or browser.');
+                // If it's not a mobile device or AR is not supported
+                // First, start the animation and sound if they haven't started
+                if (!hasPlayed) {
+                    modelViewer.play();
+                    sound.play().catch(error => {
+                        console.log("Autoplay was prevented. User will need to interact to play sound.", error);
+                    });
+                    hasPlayed = true;
+                }
+                
+                // Then show the custom warning message
+                alert("AR is supported only on a mobile device, not on this device or browser.");
             }
         });
+
     </script>
 </body>
 </html>
