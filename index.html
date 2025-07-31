@@ -159,7 +159,7 @@
                 interaction-prompt="none"
                 animation-name="Wave">
                 
-                <button slot="ar-button" id="ar-button-slotted" class="action-button" style="display:none;">
+                <button slot="ar-button" id="ar-button-slotted" class="action-button">
                     <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
                     <span class="action-button-text">
                         <strong>Press Here</strong>
@@ -190,32 +190,6 @@
         const arButtonSlotted = document.getElementById('ar-button-slotted');
         const sound = document.getElementById('sound');
         let isPlaying = false;
-        
-        // This function runs once when the page is loaded
-        window.addEventListener('load', () => {
-            // Check if the device can activate AR
-            if (modelViewer.canActivateAR) {
-                // If it can, show the "Press Here" AR button
-                arButtonSlotted.style.display = 'flex';
-                
-                // Add the AR button's click behavior for supported devices
-                arButtonSlotted.addEventListener('click', () => {
-                    // Pause other media on AR launch
-                    modelViewer.pause();
-                    sound.pause();
-                    isPlaying = false;
-                    playPauseIcon.src = 'images/play_icon.png';
-                    playPauseText.textContent = 'Play';
-                    // The 'slot="ar-button"' attribute will automatically launch AR.
-                });
-            } else {
-                // If it can't, show a custom alert on click
-                arButtonSlotted.style.display = 'flex'; // Show button
-                arButtonSlotted.addEventListener('click', () => {
-                    alert("AR is supported only on a mobile device, not on this device or browser.");
-                });
-            }
-        });
 
         // Function to toggle play/pause for 3D animation and sound
         function togglePlayPause() {
@@ -238,6 +212,23 @@
         // Click event for the play/pause button
         playPauseButton.addEventListener('click', togglePlayPause);
         
+        // This listener handles the AR button's click behavior for all devices
+        arButtonSlotted.addEventListener('click', () => {
+            // Check if the device can activate AR
+            if (modelViewer.canActivateAR) {
+                // On a supported device, pause other media and let the 'slot' attribute launch AR
+                modelViewer.pause();
+                sound.pause();
+                isPlaying = false;
+                playPauseIcon.src = 'images/play_icon.png';
+                playPauseText.textContent = 'Play';
+                // The 'slot="ar-button"' attribute will automatically launch AR.
+            } else {
+                // On an unsupported device, display the warning message
+                alert("AR is supported only on a mobile device, not on this device or browser.");
+            }
+        });
+
         // This listener will automatically pause the 3D animation and sound when AR starts
         modelViewer.addEventListener('ar-status', (event) => {
             if (event.detail.status === 'activating' || event.detail.status === 'active') {
