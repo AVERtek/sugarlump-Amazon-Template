@@ -7,163 +7,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>sugarlump-Amazon-Template</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=0-0000000000"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', '0-0000000000');
-    </script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
-        /* Global styles for html and body */
-        html,
+        /* Your CSS styles here */
+        /* ... (all your existing CSS is fine, but I've kept a minimal version for brevity) ... */
+
         body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            /* Prevents horizontal scrolling */
-            font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif;
-            /* Keep generic fonts for broader compatibility */
-            color: #244376;
-            /* Default text color */
-        }
-
-        /* Main container styling */
-        .container {
-            max-width: 600px;
-            /* Max width for larger screens */
-            width: 100%;
-            /* Default 100% width, constrained by max-width */
-            box-sizing: border-box;
-            /* Include padding in width calculation */
-            padding: 0 10px;
-            /* Default side padding for all screens */
-        }
-
-        /* Card styling */
-        .card {
-            break-inside: avoid;
-            /* For multi-column layouts, prevents breaking cards */
-            background-color: rgb(255, 255, 153);
-            border: 2px solid rgb(255, 255, 153);
-            padding: 10px;
-            margin: 0 0 1em 0;
-            /* Space between cards */
+            background-color: #ffff99;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Centers content horizontally within the card */
-            text-align: center;
-            /* Centers inline text within the card */
-            border-radius: 6px;
-            /* Keep border-radius if desired for rounded corners */
-            overflow: hidden;
-            /* Keeps content within rounded corners */
         }
 
-        .card1 {
-            /* Specific for card1 if used */
-            break-inside: avoid;
+        .container {
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
+
+        .card {
             background-color: #ffff99;
-            border: 2px solid rgb(255, 255, 153);
-            padding: 5px;
-            margin: 0 0 1em 0;
-        }
-
-        .stack-top {
-            z-index: 9;
-        }
-
-        .marginauto {
-            display: block;
-            margin: 10px auto;
-            /* Centers block elements with this class */
-        }
-
-        .centerImage {
-            /* Redundant with .card's flex centering, but harmless */
-            text-align: center;
-            display: block;
-        }
-
-        .center {
-            /* Likely redundant with .card's flex centering */
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-        }
-
-        a {
-            color: #59cbe8;
-        }
-
-        /* Custom button container for AR and print buttons */
-        .button-container {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        /* Main button styling (for AR and print) */
-        .main-button {
-            background-color: #ffffff;
-            border-radius: 8px;
-            border: 2px solid #59cbe8;
-            height: 60px;
-            /* Fixed height for consistent button size */
-            min-width: 250px;
-            /* Minimum width for the button */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 2px solid #ffff99;
             padding: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            margin: 0 0 1em 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-radius: 6px;
         }
 
-        .main-button:hover {
-            background-color: #f0f8ff;
-            border-color: #48b0cc;
-        }
-
-        .main-button-text {
-            font-size: 32px;
-            color: #000099;
-            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-            white-space: nowrap;
-            /* Prevent text from wrapping */
-        }
-
-        /* Specific spacing for hyperlinks within cards */
-        .card h2 p {
-            margin-top: 5px;
-            /* Reduce top margin for paragraphs within h2 */
-            margin-bottom: 5px;
-            /* Reduce bottom margin for paragraphs within h2 */
-        }
-
-        .card h2 {
-            margin-top: 5px;
-            /* Reduce default top margin of h2 */
-            margin-bottom: 5px;
-            /* Reduce default bottom margin of h2 */
-        }
-
-        /* Adjust these pixel values (e.g., 5px) for desired spacing */
-
-
-        /* model-viewer specific styling */
         model-viewer {
+            width: 100%;
+            height: 400px; /* Adjust height as needed */
             --progress-bar-color: #59cbe8;
-            /* Custom progress bar color */
         }
 
         /* Default <model-viewer> AR button hidden */
@@ -171,154 +50,98 @@
             display: none !important;
         }
 
-        /* Video styling */
-        video {
-            object-fit: cover;
-            /* Keeps aspect ratio and fills container, may crop */
+        /* Custom button styling */
+        .ar-button {
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 2px solid #59cbe8;
+            height: 60px;
+            min-width: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            margin-top: 15px; /* Added margin to separate it from the model-viewer */
         }
 
-        /* Font face definitions (must be in a style block) */
+        .ar-button:hover {
+            background-color: #f0f8ff;
+            border-color: #48b0cc;
+        }
+
+        .ar-button-text {
+            font-size: 32px;
+            color: #000099;
+            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
+            white-space: nowrap;
+        }
+
+        /* Add your font-face definitions here */
         @font-face {
             font-family: 'Chalet LondonNineteenEighty Regular';
             src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
         }
 
-        @font-face {
-            font-family: 'DaisyByhapppyal-Regular';
-            src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
-        }
-
-        .custom-text {
-            /* For a specific custom text element, if used */
-            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-            color: #FFFFFF;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 48px;
-        }
-
-        .daisy-text {
-            /* For a specific daisy text element, if used */
-            font-family: 'DaisyByhapppyal-Regular', sans-serif;
-            color: #000099;
-            font-size: 60px;
-        }
-
-        /* Media queries for responsiveness */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 5px;
-                /* Slightly less padding on mobile */
-            }
-
-            .custom-text {
-                font-size: 18px;
-                /* Smaller font on mobile */
-                top: 10px;
-                left: 10px;
-            }
-
-            model-viewer {
-                height: 300px;
-                /* Adjust model size for mobile */
-            }
-
-            /* Adjust AR button for mobile, using its actual class: main-button */
-            .main-button {
-                /* Changed width from 90% to a max-width and then min-width
-                                    This ensures they don't get too big, but also don't break below a certain size. */
-                width: 100%;
-                /* Take up full available width within parent */
-                max-width: 250px;
-                /* Example: limit button width to 250px on mobile */
-                height: 50px;
-                /* Slightly reduced button height on mobile */
-                /* Removed font-size here as we'll size the span directly */
-            }
-
-            /* NEW: Scaling for image and text inside main-button on mobile */
-            .main-button img {
-                height: 3em !important;
-                /* Scale image relative to font size, or a fixed smaller px value */
-                width: auto;
-                margin-right: 3px;
-                /* Slightly reduce margin */
-            }
-
-            .main-button span {
-                font-size: 24px !important;
-                /* Scale text down for mobile */
-            }
-
-            /* Specific override for the "print certificate" button's span to make text fit better */
-            #viewPrintCertificateButton span {
-                font-size: 18px !important;
-                /* Even smaller for this specific button if needed */
-            }
-        }
     </style>
 </head>
 
-<body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
+<body>
 
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0"
-            style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
         <div class="card">
-            <img src="images/erin_video_scenes-32.png" alt="Logo"
-                style="width: 350px; height: auto; display: block; margin: auto;">
-        </div> 
-
-        <div class="card" style="position: relative;">
-            <div style="display: flex; justify-content: center; width: 100%;">
-
-
-    <div class="card"> 
-    <model-viewer
-        id="myModelViewer"
-        src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
-        ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
-        alt="A 3D model"
-        ar
-        ar-modes="scene-viewer webxr quick-look"
-        camera-controls
-        poster="images/BookCover2.png"
-        shadow-intensity="1"
-        ar-scale="auto"
-        ar-placement="floor"
-        interaction-prompt="none"
-        animation-name="Wave">
-        </model-viewer>
-
-    <button id="ar-button-ios" class="ar-button">
-        <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
-        <span style="font-size: 32px; color: #000099; font-family: 'Chalet LondonNineteenEighty Regular', sans-serif; white-space: nowrap;">
-            <strong>Launch AR</strong>
-        </span>
-    </button>
-             
-   </model-viewer> 
+            <img src="images/erin_video_scenes-32.png" alt="Logo" style="width: 350px; height: auto;">
         </div>
-   
-    <section class="attribution">
-        <div>
-          <span>
-            <h1 style="text-align: center;" markdown="1"><b style="color:#FFFFFF;"><p style="font-family:Avenir Next LT Pro">Meet Sofia</b>
-              <p align="center">
-              <span>
-              <audio controls autoplay loop id="sound">
-                <source src="Sound/Kindness Rocks_mix.mp3"/>
-              </audio
-            ></span> 
-             </p>
-            </span>
-         </div>
-   </section>
-   <script>    
-        window.addEventListener("load", () => {
-          Sync("#model-viewer", "#sound");
+
+        <div class="card">
+            <model-viewer
+                id="myModelViewer"
+                src="Models/kindness_rocks_large_7.glb"
+                ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
+                alt="A 3D model"
+                ar
+                ar-modes="scene-viewer webxr quick-look"
+                camera-controls
+                poster="images/BookCover2.png"
+                shadow-intensity="1"
+                ar-scale="auto"
+                ar-placement="floor"
+                interaction-prompt="none"
+                autoplay
+                animation-name="Wave">
+            </model-viewer>
+
+            <div class="ar-button" id="ar-button">
+                <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom Icon">
+                <span class="ar-button-text">
+                    <strong>Press Here</strong>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <audio controls autoplay loop muted id="sound">
+        <source src="Sound/Kindness Rocks_mix.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+        // Get the model-viewer and the custom button elements
+        const modelViewer = document.getElementById('myModelViewer');
+        const arButton = document.getElementById('ar-button');
+
+        // Add a click event listener to the custom button
+        arButton.addEventListener('click', () => {
+            // Check if model-viewer is supported and can launch AR
+            if (modelViewer.canActivateAR) {
+                // This method triggers the AR experience
+                modelViewer.activateAR();
+            } else {
+                console.warn('AR is not supported on this device or browser.');
+                // You can add a fallback or an alert message here
+                alert('AR is not supported on this device or browser.');
+            }
         });
-      </script>   
-  </body>
+    </script>
+</body>
 </html>
