@@ -153,7 +153,7 @@
                 </video>
                 <model-viewer
                     id="myModelViewer"
-                    src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3""
+                    src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
                     ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                     alt="A 3D model"
                     ar
@@ -191,11 +191,6 @@
             </div>
         </div>
     </div>
-
-    <audio id="sound" loop preload="auto">
-        <source src="Sound/Kindness Rocks_mix.mp3" type="audio/mpeg" />
-    </audio>
-
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('myVideo');
@@ -204,23 +199,20 @@
             const playPauseIcon = document.getElementById('play-pause-icon');
             const arButton = document.getElementById('ar-button');
             const orderBookButton = document.getElementById('order-book-button');
-            const sound = document.getElementById('sound');
             let isPlaying = false;
 
             // Function to toggle play/pause for the video and sound
             function togglePlayPause() {
                 if (isPlaying) {
                     video.pause();
-                    sound.pause();
+                    video.muted = true; // Mute the video
                     playPauseIcon.src = 'images/play_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Play';
                 } else {
                     video.play().catch(error => {
                         console.log("Video autoplay was prevented.", error);
                     });
-                    sound.play().catch(error => {
-                        console.log("Sound autoplay was prevented.", error);
-                    });
+                    video.muted = false; // Unmute the video
                     playPauseIcon.src = 'images/pause_icon.png';
                     playPauseButton.querySelector('strong').textContent = 'Pause';
                 }
@@ -238,7 +230,7 @@
                     if (modelViewer.canActivateAR) {
                         // Pause the video and sound when AR is launched
                         video.pause();
-                        sound.pause();
+                        video.muted = true;
                         isPlaying = false;
                         playPauseIcon.src = 'images/play_icon.png';
                         playPauseButton.querySelector('strong').textContent = 'Play';
