@@ -135,13 +135,29 @@
                 <button slot="ar-button" aria-label="AR" style="opacity: 0; pointer-events: none;"></button>
             </model-viewer>
 
-            <div class="button-container">
+            <div
+                style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2;">
+                <video id="video-overlay"
+                    style="width: 100%; max-width: 100%; height: 100%; object-fit: cover; margin: auto; display: block;"
+                    poster="images/Video Poster_2.png" playsinline muted>
+                    <source src="Video/sugarlump_intro_erin_2.mp4" type="video/mp4">
+                </video>
+
+                <button id="play-pause-button" style="
+                    position: absolute; z-index: 3; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                    background-color: rgba(255, 255, 255, 0.8); border: none; border-radius: 50%;
+                    padding: 10px 15px; font-size: 24px; font-weight: bold; cursor: pointer;">
+                    ▶
+                </button>
+            </div>
+            
+            <!--<div class="button-container">
                 <div class="action-button" id="play-pause-button">
                     <img id="play-pause-icon" src="images/play_icon.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Play/Pause Icon">
                     <span class="action-button-text">
                         <strong>Play</strong>
                     </span>
-                </div>
+                </div> -->
                 <div class="action-button" id="ar-button">
                     <img src="images/Heart button.png" style="height: 4em; width: auto; margin-right: 5px;" alt="Custom AR Icon">
                     <span class="action-button-text">
