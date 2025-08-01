@@ -52,13 +52,13 @@
             align-items: center;
             text-align: center;
             border-radius: 6px;
-            position: relative; /* This is key for positioning the video and AR model */
+            position: relative;
         }
 
         /* The wrapper for the video and model-viewer to control their size */
         .viewer-container {
             width: 100%;
-            height: 400px; /* This sets the exact height, matching your previous model-viewer */
+            height: 400px;
             position: relative;
         }
 
@@ -66,9 +66,11 @@
         #myVideo {
             width: 100%;
             height: 100%;
-            display: block;
-            object-fit: cover; /* Ensures video fills the space without distortion */
-            z-index: 1; /* Places the video on top */
+            position: absolute; /* Position it absolutely within the container */
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            z-index: 2; /* Put the video on top of the model-viewer */
         }
 
         /* Style for the model-viewer to be positioned behind the video, allowing AR to work */
@@ -78,10 +80,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0; /* Places the model viewer behind the video */
+            z-index: 1; /* Place the model-viewer behind the video */
         }
-        
-        /* The slot AR button needs to be transparent and not clickable */
+
+        /* The slot AR button is hidden from view and interactions */
         #myModelViewer button[slot="ar-button"] {
             opacity: 0;
             pointer-events: none;
@@ -151,7 +153,7 @@
                 </video>
                 <model-viewer
                     id="myModelViewer"
-                    src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3"
+                    src="Models/kindness_rocks_large_7.glb?sound=Sound/Kindness Rocks_mix.mp3""
                     ios-src="Models/KINDNESS_ROCKS_LARGE_7_Output.usdz"
                     alt="A 3D model"
                     ar
@@ -204,7 +206,7 @@
             const orderBookButton = document.getElementById('order-book-button');
             const sound = document.getElementById('sound');
             let isPlaying = false;
-            
+
             // Function to toggle play/pause for the video and sound
             function togglePlayPause() {
                 if (isPlaying) {
@@ -229,7 +231,7 @@
             if (playPauseButton) {
                 playPauseButton.addEventListener('click', togglePlayPause);
             }
-            
+
             // Handles the custom AR button's click behavior
             if (arButton) {
                 arButton.addEventListener('click', () => {
